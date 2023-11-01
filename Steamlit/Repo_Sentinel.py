@@ -5,7 +5,7 @@ import streamlit as st
 from io import BytesIO
 
 # Set your Personal Access Token here
-token = "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"
+token = ""
 
 # Helper function to fetch data
 def fetch_data(url):
