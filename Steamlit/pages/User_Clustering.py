@@ -7,23 +7,7 @@ from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
 import numpy as np
 
-
-st.set_page_config(
-    page_title='REPO SENTINEL', page_icon='computer')
-hide_st_style = """
-            <style>
-            footer {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
-st.write(
-    '<style>div.block-container{padding-top:2rem;}</style>', unsafe_allow_html=True)
-style = "<style>h2 {text-align:;}</style>"
-st.markdown(style, unsafe_allow_html=True)
-
 # Define a function for clustering and visualization
-
-
 def cluster_and_visualize_data(data):
     # Select only the numerical columns (exclude the first two columns)
     numerical_data = data.iloc[:, 2:]
@@ -61,8 +45,7 @@ def cluster_and_visualize_data(data):
     centroids = kmeans.cluster_centers_
 
     # Calculate the Euclidean distance from each point to its cluster's centroid
-    distances = np.linalg.norm(
-        numerical_data_scaled - centroids[data['cluster']], axis=1)
+    distances = np.linalg.norm(numerical_data_scaled - centroids[data['cluster']], axis=1)
 
     # Define a threshold for identifying outliers (e.g., points with distances above a certain percentile)
     outlier_threshold = np.percentile(distances, 90)
@@ -75,17 +58,14 @@ def cluster_and_visualize_data(data):
     fig, ax = plt.subplots(figsize=(10, 6))
     for cluster_id in range(optimal_k):
         cluster_points = pca_result[data['cluster'] == cluster_id]
-        ax.scatter(cluster_points[:, 0], cluster_points[:,
-                   1], label=f'Cluster {cluster_id}')
+        ax.scatter(cluster_points[:, 0], cluster_points[:, 1], label=f'Cluster {cluster_id}')
 
     # Add annotations for cluster numbers
     for cluster_id in range(optimal_k):
-        cluster_center = np.mean(
-            pca_result[data['cluster'] == cluster_id], axis=0)
+        cluster_center = np.mean(pca_result[data['cluster'] == cluster_id], axis=0)
 
     # Plot outliers
-    ax.scatter(outliers['PCA1'], outliers['PCA2'], c='red',
-               marker='x', s=100, label='Outliers')
+    ax.scatter(outliers['PCA1'], outliers['PCA2'], c='red', marker='x', s=100, label='Outliers')
     for name, x, y in zip(outlier_names, outliers['PCA1'], outliers['PCA2']):
         ax.annotate(name, (x, y), fontsize=8, color='red')
 
@@ -95,19 +75,13 @@ def cluster_and_visualize_data(data):
     ax.legend()
 
     st.pyplot(fig)
-    st.write("Outliers:")
-    st.write({f'Outlier {i+1}': name for i,
-             name in enumerate(outlier_names)})
-
 
 # Create a Streamlit app
-
 st.title("User Clustering")
 
 st.sidebar.title("Upload Data")
 
-uploaded_file = st.sidebar.file_uploader(
-    "Upload a data file (Excel format)", type=["xlsx"])
+uploaded_file = st.sidebar.file_uploader("Upload a data file (Excel format)", type=["xlsx"])
 
 if uploaded_file is not None:
     data = pd.read_excel(uploaded_file)
@@ -122,7 +96,7 @@ if uploaded_file is not None:
 if 'data' in locals():
     st.write("Data Table")
     st.dataframe(data.head())
-
+    
     # Add a button to perform clustering and visualization in the main page
     if st.button("Cluster and Visualize"):
         cluster_and_visualize_data(data)
