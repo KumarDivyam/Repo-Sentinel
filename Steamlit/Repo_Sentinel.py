@@ -6,7 +6,7 @@ from io import BytesIO
 import time
 
 # Set your Personal Access Token here
-token = "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"
+token = ""
 
 # Helper function to fetch data
 
